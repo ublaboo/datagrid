@@ -114,7 +114,7 @@
 									 *}
 									<div class="btn-group">
 										<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" n:if="$control->canHideColumns()">
-											<i n:block = "icon-gear" class="{$icon_prefix}gear"></i>
+											<i n:block = "icon-gear" class="{$icon_prefix}cog"></i>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right dropdown-menu--grid">
 											<li n:foreach="$columns_visibility as $v_key => $visibility">
@@ -135,7 +135,7 @@
 												<a n:href="showAllColumns!" class="ajax"><i n:block = "icon-eye" class="{$icon_prefix}eye"></i> {='ublaboo_datagrid.show_all_columns'|translate}</a>
 											</li>
 											<li n:if="$control->hasSomeColumnDefaultHide()">
-												<a n:href="showDefaultColumns!" class="ajax"><i n:block = "icon-repeat" class="{$icon_prefix}repeat"></i> {='ublaboo_datagrid.show_default_columns'|translate}</a>
+												<a n:href="showDefaultColumns!" class="ajax"><i n:block = "icon-repeat" class="{$icon_prefix}redo"></i> {='ublaboo_datagrid.show_default_columns'|translate}</a>
 											</li>
 										</ul>
 									</div>
@@ -192,7 +192,7 @@
 
 									{if $control->hasColumnReset()}
 										<a data-datagrid-reset-filter-by-column="{$key}" n:href="resetColumnFilter!, key => $key" n:class="isset($filters[$key]) && $filters[$key]->isValueSet() ? '' : 'hidden', 'ajax'" title="{='ublaboo_datagrid.reset_filter'|translate}">
-											<i n:block="icon-remove" class="{$icon_prefix}remove"></i>
+											<i n:block="icon-remove" class="{$icon_prefix}times"></i>
 										</a>
 									{/if}
 								</div>
