@@ -342,6 +342,14 @@ class DataGrid extends Control
 	protected $gridSession;
 
 	/**
+	 * @var array
+	 */
+	private $hideColumnSessionKeys = [
+		'_grid_hidden_columns',
+		'_grid_hidden_columns_manipulated',
+	];
+
+	/**
 	 * @var ItemDetail|null
 	 */
 	protected $itemsDetail;
@@ -467,7 +475,7 @@ class DataGrid extends Control
 				/**
 				 * Get session
 				 */
-				if ($this->rememberState) {
+				if ($this->rememberState || $this->canHideColumns()) {
 					$sessionSection = $presenter->getSession($this->getSessionSectionName());
 
 					if (!$sessionSection instanceof SessionSection) {
@@ -2747,7 +2755,7 @@ class DataGrid extends Control
 	 */
 	public function getSessionData(?string $key = null, $defaultValue = null)
 	{
-		if (!$this->rememberState) {
+		if (!$this->rememberState && !in_array($key, $this->hideColumnSessionKeys, true)) {
 			return $key === null
 				? []
 				: $defaultValue;
@@ -2762,7 +2770,7 @@ class DataGrid extends Control
 	 */
 	public function saveSessionData(string $key, $value): void
 	{
-		if ($this->rememberState) {
+		if ($this->rememberState || in_array($key, $this->hideColumnSessionKeys, true)) {
 			$this->gridSession[$key] = $value;
 		}
 	}
