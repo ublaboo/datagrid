@@ -20,10 +20,14 @@ trait TButtonIcon
 	/**
 	 * Set icon
 	 * @param string $icon
+	 * @param string $content
 	 */
-	public function setIcon($icon)
+	public function setIcon($icon, $content = '')
 	{
-		$this->icon = $icon;
+		$this->icon = (object)[
+			'class' => $class,
+			'content' => $content,
+		];
 
 		return $this;
 	}
