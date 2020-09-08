@@ -722,16 +722,4 @@ $.nette.ext('datagrid.reset-filter-by-column', {
 		if payload.non_empty_filters && payload.non_empty_filters.length
 			for key in payload.non_empty_filters
 				grid.find('[data-datagrid-reset-filter-by-column='+key+']').removeClass('hidden')
-
-			# Refresh their url (table header is not refreshed using snippets)
-			#
-			href = grid.find('.reset-filter').attr('href')
-
-			grid.find('[data-datagrid-reset-filter-by-column]').each ->
-				key = $(this).attr('data-datagrid-reset-filter-by-column')
-
-				new_href = href.replace('do=' + payload._datagrid_name + '-resetFilter', 'do=' + payload._datagrid_name + '-resetColumnFilter')
-				new_href += '&' + payload._datagrid_name + '-key=' + key
-
-				$(this).attr('href', new_href)
 })

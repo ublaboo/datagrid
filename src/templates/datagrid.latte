@@ -73,7 +73,7 @@
 				{/block}
 			{/if}
 			<table class="{block table-class}table table-hover table-striped table-bordered table-sm{/block}" n:snippet="table" n:block="data">
-				<thead n:block="header">
+				<thead n:block="header" n:snippet="thead">
 					<tr class="row-group-actions" n:if="$hasGroupActions || $exports || $toolbar_buttons || $control->canHideColumns() || $inlineAdd" n:block="group-actions">
 						<th colspan="{$control->getColumnsCount()}" class="ublaboo-datagrid-th-form-inline">
 							{if $hasGroupActions}

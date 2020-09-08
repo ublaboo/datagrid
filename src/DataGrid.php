@@ -541,7 +541,6 @@ class DataGrid extends Nette\Application\UI\Control
 		$template->filter_active = $this->isFilterActive();
 		$template->original_template = $this->getOriginalTemplateFile();
 		$template->icon_prefix = static::$icon_prefix;
-		$template->icon_prefix = static::$icon_prefix;
 		$template->items_detail = $this->items_detail;
 		$template->columns_visibility = $this->getColumnsVisibility();
 		$template->columnsSummary = $this->columnsSummary;
@@ -2524,6 +2523,7 @@ class DataGrid extends Nette\Application\UI\Control
 	{
 		if ($this->getPresenter()->isAjax()) {
 			$this->redrawControl('tbody');
+			$this->redrawControl('thead');
 			$this->redrawControl('pagination');
 			$this->redrawControl('summary');
 			$this->redrawControl('thead-group-action');
