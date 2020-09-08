@@ -482,7 +482,7 @@
 		{var $td = $column->getElementForRender('td', $key)}
 
 		{$td->startTag()|noescape}
-			{$columnsSummary->render($key)}
+			{$columnsSummary->render($key)|noescape}
 		{$td->endTag()|noescape}
 	{/foreach}
 
