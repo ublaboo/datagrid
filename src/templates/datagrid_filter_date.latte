@@ -10,11 +10,11 @@
 		<div class="col-sm-9 form-inline">
 			<div class="input-group input-group-sm datagrid-input-group-full-width">
 				{input $input}
-				<label n:name="$input" class="input-group-addon input-group-append">
-					<span class="input-group-text">
+				<div class="input-group-append">
+					<label n:name="$input" class="input-group-text">
 						<i class="{$iconPrefix}calendar"></i>
-					</span>
-				</label>
+					</label>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -22,11 +22,11 @@
 	<div class="form-inline">
 		<div class="input-group input-group-sm">
 			{input $input}
-			<label n:name="$input" class="input-group-addon input-group-append">
-				<span class="input-group-text">
+			<div class="input-group-append">
+				<label n:name="$input" class="input-group-text">
 					<i class="{$iconPrefix}calendar"></i>
-				</span>
-			</label>
+				</label>
+			</div>
 		</div>
 	</div>
 {/if}

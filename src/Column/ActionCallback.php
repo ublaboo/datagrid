@@ -16,7 +16,7 @@ class ActionCallback extends Action
 	use SmartObject;
 
 	/**
-	 * @var callable
+	 * @var callable[]
 	 */
 	public $onClick;
 

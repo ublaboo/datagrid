@@ -44,6 +44,10 @@ Or you can define column template by defining special block(s):
 	:)
 {/define}
 
+{define col-title}
+	{$item->title} {* displays the title value *}
+{/define}
+
 ```
 
 This will overwrite native rendering of ID column (`$grid->addColumn('id', 'Id');`).

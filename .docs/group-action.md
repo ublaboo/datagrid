@@ -13,9 +13,21 @@ Table of contents
 
 ## Api
 
+If you need to do some operations with multiple rows, there are group actions. There are zero, one or two level group actions.
+
+### Zero level
+
+![Group button action](https://github.com/contributte/datagrid/blob/master/.docs/assets/group_button_action.gif?raw=true)
+
+When you want to show just one action button, do simply that:
+
+```php
+$grid->addGroupButtonAction('Say hello')->onClick[] = [$this, 'sayHello'];
+```
+
 ### One level
 
-If you need to do some operations with multiple rows, there are group actions. There are one or two level group actions. One level:
+![Group action 1](https://github.com/contributte/datagrid/blob/master/.docs/assets/group_button_action_1.gif?raw=true)
 
 ```php
 $grid->addGroupAction('Delete examples')->onSelect[] = [$this, 'deleteExamples'];
@@ -39,7 +51,9 @@ public function deleteExamples(array $ids): void
 }
 ```
 
-### Two level
+### Second level
+
+![Group action 2](https://github.com/contributte/datagrid/blob/master/.docs/assets/group_button_action_2.gif?raw=true)
 
 There is also the two-level possibility of group action:
 

@@ -4,5 +4,3 @@ includes:
 parameters:
 	ignoreErrors:
 		- '#^Access to an undefined property Nette\\Bridges\\ApplicationLatte\\Template::\$.+\.$#'
-		- '#^Method Ublaboo\\DataGrid\\Localization\\SimpleTranslator::translate\(\) has parameter \$[a-z]+ with no typehint specified\.$#'
-		- '#^Array \(array<callable\(Nette\\Forms\\Form\): void>\) does not accept array\(\$this\(.+\), .+\)\.$#'

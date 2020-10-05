@@ -22,7 +22,7 @@ DataGrid allows you to export the data via `$grid->addExportCallback()`. The par
 $grid->addExportCallback($text, $callback, $filtered = false);
 ```
 
-You can tell whether to use ajax or not (`->setAjax()`). Or a button title (`->setTitle('Title')`).
+You can tell whether to use ajax or not (`->setAjax()`). Or a button title (`->setTitle('Title')`). Or target (`->setTarget('_blank')`).
 
 ## CSV export
 

@@ -20,7 +20,15 @@
 	{/if}
 	<ul class="dropdown-menu">
 		<li n:foreach="$status->getOptions() as $option">
-			<a class="{$option->getClassInDropdown()}" n:href="changeStatus!, id => $row->getId(), key => $status->getKey(), value => $option->getValue()">
+			{var $confirmationDialog = $option->getConfirmationDialog($row)}
+
+			<a
+				class="{$option->getClassInDropdown()}"
+				n:href="changeStatus!, id => $row->getId(), key => $status->getKey(), value => $option->getValue()"
+				{if $confirmationDialog}
+					data-{Ublaboo\DataGrid\Column\Action::$dataConfirmAttributeName}={$confirmationDialog}
+				{/if}
+			>
 				{if $option->getIconSecondary()}<i class="datagrid-column-status-option-icon {$iconPrefix}{$option->getIconSecondary()}"></i> {/if}
 				{$option->getText()|translate}
 			</a>

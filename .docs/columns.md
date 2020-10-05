@@ -25,6 +25,9 @@ Table of contents
 	- [Hideable columns](#hideable-columns)
 		- [Default hide](#default-hide)
 	- [Columns Summary](#columns-summary)
+	- [Aggregation Function](#aggregation-function)
+		- [Single column](#single-column)
+		- [Multiple columns](#multiple-columns)
 	- [Column \(th&gt;, td&gt;\) attributes](#column-th-td-attributes)
 	- [Column callback](#column-callback)
 
@@ -260,8 +263,8 @@ $grid->addColumnLink('name', 'Name', 'edit')
 
 ## Column Status
 
-![Status 1](assets/status1.gif)
-![Status 1](assets/status2.gif)
+![Status 1](https://github.com/contributte/datagrid/blob/master/.docs/assets/status1.gif)
+![Status 1](https://github.com/contributte/datagrid/blob/master/.docs/assets/status2.gif)
 
 Once your item keep some "status" flag, it is appropriate to show user the status in highlighted form. Also there could be a dropdown with available statuses:
 
@@ -274,7 +277,7 @@ $grid->addColumnStatus('status', 'Status')
 	->onChange[] = function($id, $new_value) { dump($id, $new_value); die; };
 ```
 
-ColumnStatus has optional caret, icon and class. By default, there is a caret visible and the main button that toggles statuses dropdown has class "btn-success". You can change all these properties:
+ColumnStatus has optional caret, icon, class and confirmation. By default, there is a caret visible and the main button that toggles statuses dropdown has class "btn-success". You can change all these properties:
 
 ```php
 $grid->addColumnStatus('status', 'Status')
@@ -282,6 +285,7 @@ $grid->addColumnStatus('status', 'Status')
 	->addOption(1, 'Online')
 		->setIcon('check')
 		->setClass('btn-success')
+		->setConfirmation(new StringConfirmation('Do you really want set status as Online?'))
 		->endOption()
 	->addOption(2, 'Standby')
 		->setIcon('user')
@@ -341,7 +345,7 @@ $grid->getColumn('status')->getOption(2)
 
 ## Hideable columns
 
-![Columns Hiding](assets/hideable_columns.gif)
+![Columns Hiding](https://github.com/contributte/datagrid/blob/master/.docs/assets/hideable_columns.gif)
 
 In example datargid above, you can hide columns and then reveal them again. This feature is disabled by default. You can enable it like this:
 
@@ -362,7 +366,7 @@ $grid->addColumnText('name', 'Name')
 
 If default hide is used, new button is shown in that settings (gear) dropdown - **Show default columns**:
 
-<img title="Columns Hiding" src="assets/hideable_columns_reset.png" width="267" height="256">
+<img title="Columns Hiding" src="https://github.com/contributte/datagrid/blob/master/.docs/assets/hideable_columns_reset.png" width="267" height="256">
 
 ## Columns Summary
 
@@ -405,6 +409,74 @@ $grid->setColumnsSummary(['price', 'amount'])
 		return $sum . ' items';
 	});
 ```
+
+## Aggregation Function
+
+### Single column
+
+Some column aggregation can be viewed either using columns summary or using Aggregation Function:
+
+```php
+$grid->addAggregationFunction('status', new FunctionSum('id'));
+```
+
+This will render a sum of ids under the `"status"` column.
+
+As mentioned above, there is one aggregation function prepared: `Ublaboo\DataGrid\AggregationFunction\FunctionSum`. You can implement whatever function you like, it just have to implement `Ublaboo\DataGrid\AggregationFunction\ISingleColumnAggregationFunction`.
+
+### Multiple columns
+
+In case you want to make the aggreagation directly using SQL by your domain, you will probably use interface `IMultipleAggregationFunction` (instead of `ISingleColumnAggregationFunction`):
+
+```php
+$grid->setMultipleAggregationFunction(
+	new class implements IMultipleAggregationFunction
+	{
+
+		/**
+		 * @var int
+		 */
+		private $idsSum = 0;
+
+		/**
+		 * @var float
+		 */
+		private $avgAge = 0.0;
+
+
+		public function getFilterDataType(): string
+		{
+			return IAggregationFunction::DATA_TYPE_PAGINATED;
+		}
+
+
+		public function processDataSource($dataSource): void
+		{
+			$this->idsSum = (int) $dataSource->getConnection()
+				->select('SUM([id])')
+				->from($dataSource, '_')
+				->fetchSingle();
+
+			$this->avgAge = round((float) $dataSource->getConnection()
+				->select('AVG(YEAR([birth_date]))')
+				->from($dataSource, '_')
+				->fetchSingle());
+		}
+
+
+		public function renderResult(string $key)
+		{
+			if ($key === 'id') {
+				return 'Ids sum: ' . $this->idsSum;
+			} elseif ($key === 'age') {
+				return 'Avg Age: ' . (int) (date('Y') - $this->avgAge);
+			}
+		}
+	}
+);
+```
+
+This aggregatin is used along with `Dibi` in the demo.
 
 ## Column (th&gt;, td&gt;) attributes 
 

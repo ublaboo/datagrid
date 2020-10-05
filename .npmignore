@@ -5,9 +5,6 @@
 /src
 /.docs
 
-# Assets
-/bower.json
-
 # CI
 /.travis.yml
 /.scrutinizer.yml

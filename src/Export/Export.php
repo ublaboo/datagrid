@@ -58,6 +58,12 @@ class Export
 	protected $confirmDialog = null;
 
 
+	/**
+	 * @var string|null
+	 */
+	protected $target = null;
+
+
 	public function __construct(
 		DataGrid $grid,
 		string $text,
@@ -79,6 +85,7 @@ class Export
 			'class' => [$this->class],
 			'title' => $this->grid->getTranslator()->translate($this->getTitle()),
 			'href' => $this->link,
+			'target' => $this->target,
 		]);
 
 		$this->tryAddIcon(
@@ -181,5 +188,17 @@ class Export
 	public function invoke(array $data): void
 	{
 		($this->callback)($data, $this->grid);
+	}
+
+
+	/**
+	 * Adds target to html:a [_blank, _self, _parent, _top]
+	 * @param string|null $target
+	 */
+	public function setTarget($target = null): void
+	{
+		if (in_array($target, ['_blank', '_self', '_parent', '_top'], true)) {
+			$this->target = $target;
+		}
 	}
 }

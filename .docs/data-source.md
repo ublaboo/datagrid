@@ -81,7 +81,7 @@ User should use collection's `QueryBuilder` instead:
 ```php
 $grid->getFilter('name')
 	->setCondition(function ($collection, $value) {
-		$collection->getQueryBuilder()->andWhere(['name' => $value]);
+		$collection->getQueryBuilder()->andWhere('name LIKE %s', "%$value%");
 	});
 ```
 

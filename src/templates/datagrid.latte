@@ -31,7 +31,7 @@
 					{if $control->hasCollapsibleOuterFilters() && !$filter_active}
 						{var $filter_row_class = 'row-filters collapse'}
 					{elseif $filter_active}
-						{var $filter_row_class = 'row-filters collapse in'}
+						{var $filter_row_class = 'row-filters collapse in show'}
 					{else}
 						{var $filter_row_class = 'row-filters'}
 					{/if}
@@ -72,14 +72,18 @@
 						<th colspan="{$control->getColumnsCount()}" class="ublaboo-datagrid-th-form-inline">
 							{if $hasGroupActions}
 								{block group_actions}
-									{='ublaboo_datagrid.group_actions'|translate}:
+									<span class="datagrid-group-action-title">
+										{='ublaboo_datagrid.group_actions'|translate}:
+									</span>
 									{foreach $filter['group_action']->getControls() as $form_control}
-										{if $form_control instanceof \Nette\Forms\Controls\SubmitButton}
-											{input $form_control, class => 'btn btn-primary btn-sm', style => 'display:none'}
+										{if $form_control instanceof \Nette\Forms\Controls\SubmitButton && $form_control->getName() === 'submit'}
+											{input $form_control, class => 'btn btn-primary btn-sm', disabled => TRUE}
+										{elseif $form_control instanceof \Nette\Forms\Controls\SubmitButton}
+											{input $form_control, disabled => TRUE}
 										{elseif $form_control->getName() == 'group_action'}
 											{input $form_control, class => 'form-control input-sm form-control-sm', disabled => TRUE}
 										{else}
-											{input $form_control, style => 'display:none'}
+											{input $form_control}
 										{/if}
 									{/foreach}
 									{if $control->shouldShowSelectedRowsCount()}
@@ -319,8 +323,8 @@
 									{if isset($toggle_detail) && $toggle_detail == $row->getId()}
 										{var $item_detail_params = ['item' => $item, '_form' => $filter] + $itemsDetail->getTemplateVariables()}
 
-										{if isset($filter['itemsDetail_form'])}
-											{var $item_detail_params['itemsDetail_form'] = $filter['itemsDetail_form']}
+										{if isset($filter['items_detail_form'])}
+											{var $item_detail_params['items_detail_form'] = $filter['items_detail_form']}
 										{/if}
 
 										{ifset #detail}
@@ -350,7 +354,7 @@
 							{include inlineAddRow, columns => $columns}
 						{/if}
 
-						{if $columnsSummary && !$columnsSummary->getPositionTop()}
+						{if ($columnsSummary && !$columnsSummary->getPositionTop()) || $control->hasSomeAggregationFunction()}
 							{include columnSummary}
 						{/if}
 

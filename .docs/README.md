@@ -1,6 +1,7 @@
 Table of contents
 
 - [Introduction](index.md)
+- [Assets](assets.md)
 - [Data sources](data-sources.md)
 - [Columns](columns.md)
 - [Filters](filters.md)

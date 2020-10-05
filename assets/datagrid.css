@@ -575,6 +575,14 @@
 		vertical-align: middle
 	}
 
+	.datagrid .ublaboo-datagrid-th-form-inline .form-control[hidden] {
+		display:none;
+	}
+
+	.ublaboo-datagrid-th-form-inline .form-control[hidden] {
+		display: none;
+	}
+
 	.datagrid .ublaboo-datagrid-th-form-inline .input-group {
 		display: inline-table;
 		vertical-align: middle

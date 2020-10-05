@@ -28,8 +28,7 @@ class DibiFluentPostgreDataSource extends DibiFluentDataSource
 			$words = $filter->hasSplitWordsSearch() === false ? [$value] : explode(' ', $value);
 
 			foreach ($words as $word) {
-				$escaped = $driver->escapeLike($word, 0);
-				$or[] = "$column ILIKE $escaped";
+				$or[] = "$column ILIKE " . $driver->escapeText('%' . $word . '%');
 			}
 		}
 

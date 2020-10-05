@@ -142,6 +142,7 @@ class ArrayDataSource implements IDataSource
 			foreach ($condition as $column => $value) {
 				$value = (string) $value;
 				$rowVal = (string) $row[$column];
+
 				if ($filter instanceof FilterText && $filter->isExactSearch()) {
 					return $rowVal === $value;
 				}

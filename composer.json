@@ -26,12 +26,12 @@
 	},
 	"require": {
 		"php": "^7.2",
-		"contributte/application": "^0.4.0",
+		"contributte/application": "^0.4.1",
 		"nette/application": "^3.0.1",
 		"nette/di": "^3.0.0",
 		"nette/forms": "^3.0.1",
 		"nette/utils": "^3.0.1",
-		"symfony/property-access": "^3.0.0 || ^4.0.0"
+		"symfony/property-access": "^3.0.0 || ^4.0.0 || ^5.0.0"
 	},
 	"require-dev": {
 		"dibi/dibi": "^3.0.0 || ^4.0.0",

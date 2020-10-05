@@ -23,10 +23,4 @@ interface IAggregationFunction
 	 * @param Fluent|QueryBuilder|Collection|Selection $dataSource
 	 */
 	public function processDataSource($dataSource): void;
-
-
-	/**
-	 * @return mixed
-	 */
-	public function renderResult();
 }

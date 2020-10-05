@@ -12,7 +12,7 @@ trait TDataGridAggregationFunction
 {
 
 	/**
-	 * @var array|IAggregationFunction[]
+	 * @var array|ISingleColumnAggregationFunction[]
 	 */
 	private $aggregationFunctions = [];
 
@@ -27,7 +27,7 @@ trait TDataGridAggregationFunction
 	 */
 	public function addAggregationFunction(
 		string $key,
-		IAggregationFunction $aggregationFunction
+		ISingleColumnAggregationFunction $aggregationFunction
 	): self
 	{
 		if ($this->hasColumnsSummary()) {
@@ -186,7 +186,7 @@ trait TDataGridAggregationFunction
 
 
 	/**
-	 * @return array<IAggregationFunction>
+	 * @return array<ISingleColumnAggregationFunction>
 	 */
 	public function getAggregationFunctions(): array
 	{

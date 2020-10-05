@@ -17,6 +17,8 @@ use Nette\Bridges\ApplicationLatte\Template;
 use Nette\ComponentModel\IContainer;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton as FormsSubmitButton;
+use Nette\Forms\Form as NetteForm;
+use Nette\Forms\IControl;
 use Nette\Http\SessionSection;
 use Nette\Localization\ITranslator;
 use Nette\Utils\ArrayHash;
@@ -51,6 +53,7 @@ use Ublaboo\DataGrid\Filter\IFilterDate;
 use Ublaboo\DataGrid\Filter\SubmitButton;
 use Ublaboo\DataGrid\GroupAction\GroupAction;
 use Ublaboo\DataGrid\GroupAction\GroupActionCollection;
+use Ublaboo\DataGrid\GroupAction\GroupButtonAction;
 use Ublaboo\DataGrid\InlineEdit\InlineAdd;
 use Ublaboo\DataGrid\InlineEdit\InlineEdit;
 use Ublaboo\DataGrid\Localization\SimpleTranslator;
@@ -58,7 +61,6 @@ use Ublaboo\DataGrid\Toolbar\ToolbarButton;
 use Ublaboo\DataGrid\Utils\ArraysHelper;
 use Ublaboo\DataGrid\Utils\ItemDetailForm;
 use Ublaboo\DataGrid\Utils\Sorting;
-use UnexpectedValueException;
 
 /**
  * @method onRedraw()
@@ -469,7 +471,7 @@ class DataGrid extends Control
 					$sessionSection = $presenter->getSession($this->getSessionSectionName());
 
 					if (!$sessionSection instanceof SessionSection) {
-						throw new UnexpectedValueException;
+						throw new \UnexpectedValueException;
 					}
 
 					$this->gridSession = $sessionSection;
@@ -499,7 +501,7 @@ class DataGrid extends Control
 		$template = $this->getTemplate();
 
 		if (!$template instanceof Template) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		$template->setTranslator($this->getTranslator());
@@ -822,6 +824,10 @@ class DataGrid extends Control
 		foreach ($sort as $key => $order) {
 			unset($sort[$key]);
 
+			if ($order !== 'ASC' && $order !== 'DESC') {
+				continue;
+			}
+
 			try {
 				$column = $this->getColumn($key);
 
@@ -832,7 +838,7 @@ class DataGrid extends Control
 			$sort[$column->getSortingColumn()] = $order;
 		}
 
-		if ($sortCallback !== null && isset($column)) {
+		if ($sortCallback === null && isset($column)) {
 			$sortCallback = $column->getSortableCallback();
 		}
 
@@ -894,7 +900,7 @@ class DataGrid extends Control
 	public function treeViewChildrenCallback($item): bool
 	{
 		if ($this->treeViewHasChildrenCallback === null) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		return (bool) call_user_func($this->treeViewHasChildrenCallback, $item);
@@ -1492,16 +1498,18 @@ class DataGrid extends Control
 			$select->setValue($this->getPerPage());
 		}
 
-		$form->addSubmit('perPage_submit', 'ublaboo_datagrid.perPage_submit')
+		$form->addSubmit('perPage_submit', 'ublaboo_datagrid.per_page_submit')
 			->setValidationScope([$select]);
 
-		$form->onSubmit[] = [$this, 'filterSucceeded'];
+		$form->onSubmit[] = function (NetteForm $form): void {
+			$this->filterSucceeded($form);
+		};
 
 		return $form;
 	}
 
 
-	public function setFilterContainerDefaults(Container $container, array $values): void
+	public function setFilterContainerDefaults(Container $container, array $values, ?string $parentKey = null): void
 	{
 		foreach ($container->getComponents() as $key => $control) {
 			if (!isset($values[$key])) {
@@ -1509,7 +1517,7 @@ class DataGrid extends Control
 			}
 
 			if ($control instanceof Container) {
-				$this->setFilterContainerDefaults($control, (array) $values[$key]);
+				$this->setFilterContainerDefaults($control, (array) $values[$key], (string) $key);
 
 				continue;
 			}
@@ -1517,7 +1525,11 @@ class DataGrid extends Control
 			$value = $values[$key];
 
 			if ($value instanceof \DateTime) {
-				$filter = $this->getFilter($key);
+				if ($parentKey !== null) {
+					$filter = $this->getFilter($parentKey);
+				} else {
+					$filter = $this->getFilter((string) $key);
+				}
 
 				if ($filter instanceof IFilterDate) {
 					$value = $value->format($filter->getPhpFormat());
@@ -1525,6 +1537,10 @@ class DataGrid extends Control
 			}
 
 			try {
+				if (!$control instanceof IControl) {
+					throw new \UnexpectedValueException;
+				}
+
 				$control->setValue($value);
 
 			} catch (InvalidArgumentException $e) {
@@ -1539,7 +1555,7 @@ class DataGrid extends Control
 	/**
 	 * Set $this->filter values after filter form submitted
 	 */
-	public function filterSucceeded(Form $form): void
+	public function filterSucceeded(NetteForm $form): void
 	{
 		if ($this->snippetsSet) {
 			return;
@@ -1575,7 +1591,7 @@ class DataGrid extends Control
 				|| !$edit['submit'] instanceof FormsSubmitButton
 				|| !$edit['cancel'] instanceof FormsSubmitButton
 			) {
-				throw new UnexpectedValueException;
+				throw new \UnexpectedValueException;
 			}
 
 			if ($edit['submit']->isSubmittedBy() || $edit['cancel']->isSubmittedBy()) {
@@ -1623,7 +1639,7 @@ class DataGrid extends Control
 				|| !$add['submit'] instanceof FormsSubmitButton
 				|| !$add['cancel'] instanceof FormsSubmitButton
 			) {
-				throw new UnexpectedValueException;
+				throw new \UnexpectedValueException;
 			}
 
 			if ($add['submit']->isSubmittedBy() || $add['cancel']->isSubmittedBy()) {
@@ -1645,7 +1661,7 @@ class DataGrid extends Control
 		$values = $values['filter'];
 
 		if (!$values instanceof ArrayHash) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		foreach ($values as $key => $value) {
@@ -1971,6 +1987,12 @@ class DataGrid extends Control
 	}
 
 
+	public function addGroupButtonAction(string $title, ?string $class = null): GroupButtonAction
+	{
+		return $this->getGroupActionCollection()->addGroupButtonAction($title, $class);
+	}
+
+
 	public function addGroupSelectAction(string $title, array $options = []): GroupAction
 	{
 		return $this->getGroupActionCollection()->addGroupSelectAction($title, $options);
@@ -2221,7 +2243,7 @@ class DataGrid extends Control
 	public function handleGetChildren($parent): void
 	{
 		if (!is_callable($this->treeViewChildrenCallback)) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		$this->setDataSource(call_user_func($this->treeViewChildrenCallback, $parent));
@@ -2247,7 +2269,7 @@ class DataGrid extends Control
 		$template = $this->getTemplate();
 
 		if (!$template instanceof Template) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		$template->add('toggle_detail', $id);
@@ -2287,7 +2309,7 @@ class DataGrid extends Control
 		$request = $this->getPresenterInstance()->getRequest();
 
 		if (!$request instanceof Request) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		$value = $request->getPost('value');
@@ -2296,12 +2318,18 @@ class DataGrid extends Control
 		 * @var mixed Could be null of course
 		 */
 		if ($column->getEditableCallback() === null) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		$newValue = $column->getEditableCallback()($id, $value);
 
 		$this->getPresenterInstance()->payload->_datagrid_editable_new_value = $newValue;
+		$this->getPresenterInstance()->payload->postGet = true;
+		$this->getPresenterInstance()->payload->url = $this->link('this');
+
+		if (!$this->getPresenterInstance()->isControlInvalid(null)) {
+			$this->getPresenterInstance()->sendPayload();
+		}
 	}
 
 
@@ -2358,7 +2386,7 @@ class DataGrid extends Control
 		}
 
 		if (!$this->columns[$key] instanceof ColumnStatus) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		$this->columns[$key]->onChange($id, $value);
@@ -2601,7 +2629,7 @@ class DataGrid extends Control
 			$paginator = $this['paginator'];
 
 			if (!$paginator instanceof DataGridPaginator) {
-				throw new UnexpectedValueException;
+				throw new \UnexpectedValueException;
 			}
 
 			return $paginator;
@@ -2959,13 +2987,13 @@ class DataGrid extends Control
 			$filterContainer = $this['filter'];
 
 			if (!$filterContainer instanceof Container) {
-				throw new UnexpectedValueException;
+				throw new \UnexpectedValueException;
 			}
 
 			$inlineEditContainer = $filterContainer['inline_edit'];
 
 			if (!$inlineEditContainer instanceof Container) {
-				throw new UnexpectedValueException;
+				throw new \UnexpectedValueException;
 			}
 
 			$inlineEditContainer->addHidden('_id', $id);
@@ -3080,7 +3108,7 @@ class DataGrid extends Control
 
 		return $this->componentFullName;
 	}
-	
+
 
 	/**
 	 * Tell grid filters to by submitted automatically
@@ -3235,7 +3263,7 @@ class DataGrid extends Control
 
 	/**
 	 * @internal
-	 * @throws UnexpectedValueException
+	 * @throws \UnexpectedValueException
 	 */
 	public function getSortableParentPath(): string
 	{
@@ -3246,7 +3274,7 @@ class DataGrid extends Control
 		$presenter = $this->getParentComponent()->lookupPath(IPresenter::class, false);
 
 		if ($presenter === null) {
-			throw new UnexpectedValueException(
+			throw new \UnexpectedValueException(
 				sprintf('%s needs %s', self::class, IPresenter::class)
 			);
 		}
@@ -3311,7 +3339,7 @@ class DataGrid extends Control
 		$presenter = $this->getPresenter();
 
 		if (!$presenter instanceof Presenter) {
-			throw new UnexpectedValueException;
+			throw new \UnexpectedValueException;
 		}
 
 		return $presenter;

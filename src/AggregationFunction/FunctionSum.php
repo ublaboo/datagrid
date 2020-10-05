@@ -11,7 +11,7 @@ use Nette\Database\Table\Selection;
 use Nette\Utils\Strings;
 use Ublaboo\DataGrid\Utils\PropertyAccessHelper;
 
-class FunctionSum implements IAggregationFunction
+class FunctionSum implements ISingleColumnAggregationFunction
 {
 
 	/**

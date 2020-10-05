@@ -187,7 +187,7 @@ class Row
 				break;
 			}
 
-			if ($value->__isset($property)) {
+			if (!$value->__isset($property)) {
 				if ($this->datagrid->strictEntityProperty) {
 					throw new DataGridException(sprintf(
 						'Target Property [%s] is not an object or is empty, trying to get [%s]',

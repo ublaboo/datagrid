@@ -112,7 +112,7 @@ class ColumnStatus extends Column
 			throw new DataGridColumnStatusException('Option value has to be scalar');
 		}
 
-		$option = new Option($this, $value, $text);
+		$option = new Option($this->grid, $this, $value, $text);
 
 		$this->options[] = $option;
 

@@ -12,22 +12,22 @@
 		<div class="col-sm-4 form-inline">
 			<div class="input-group input-group-sm">
 				{input $container['from']}
-				<label n:name="$container['from']" class="input-group-addon input-group-append">
-					<span class="input-group-text">
+				<div class="input-group-append input-group-addon-first">
+					<label n:name="$container['from']" class="input-group-text input-group-text-first">
 						<i class="{$iconPrefix}calendar"></i>
-					</span>
-				</label>
+					</label>
+				</div>
 			</div>
 		</div>
 		{label $container['to'], class => 'filter-range-delimiter col-sm-1 control-label' /}
 		<div class="col-sm-4 form-inline">
 			<div class="input-group input-group-sm">
 				{input $container['to']}
-				<label n:name="$container['to']" class="input-group-addon input-group-append">
-					<span class="input-group-text">
+				<div class="input-group-append">
+					<label n:name="$container['to']" class="input-group-text">
 						<i class="{$iconPrefix}calendar"></i>
-					</span>
-				</label>
+					</label>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -35,22 +35,22 @@
 	<div class="datagrid-col-filter-date-range form-inline">
 		<div class="input-group input-group-sm">
 			{input $container['from']}
-			<label n:name="$container['from']" class="input-group-addon input-group-append input-group-addon-first">
-				<span class="input-group-text input-group-text-first">
+			<div class="input-group-append input-group-addon-first">
+				<label n:name="$container['from']" class="input-group-text input-group-text-first">
 					<i class="{$iconPrefix}calendar"></i>
-				</span>
-			</label>
+				</label>
+			</div>
 		</div>
 
 		<div class="input-group-addon datagrid-col-filter-datte-range-delimiter">-</div>
 
 		<div class="input-group input-group-sm">
 			{input $container['to']}
-			<label n:name="$container['to']" class="input-group-addon input-group-append">
-				<span class="input-group-text">
+			<div class="input-group-append">
+				<label n:name="$container['to']" class="input-group-text">
 					<i class="{$iconPrefix}calendar"></i>
-				</span>
-			</label>
+				</label>
+			</div>
 		</div>
 	</div>
 {/if}
