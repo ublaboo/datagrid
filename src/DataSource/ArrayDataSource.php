@@ -317,10 +317,13 @@ class ArrayDataSource implements IDataSource
 			$data = [];
 
 			foreach ($this->data as $item) {
-				$sort_by = is_object($item[$column]) && $item[$column] instanceof DateTimeInterface
-					? $item[$column]->format('Y-m-d H:i:s')
-					: (string) $item[$column];
-
+				if (is_object($item->$column) && $item->$column instanceof \DateTimeInterface) {
+					$sort_by = $item->$column->format('Y-m-d H:i:s');
+				} elseif (is_object($item[$column]) && $item[$column] instanceof \DateTimeInterface) {
+					$sort_by = $item[$column]->format('Y-m-d H:i:s');
+				} else {
+					$sort_by = (string) $item[$column];
+				}
 				$data[$sort_by][] = $item;
 			}
 
