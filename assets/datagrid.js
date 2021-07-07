@@ -123,6 +123,64 @@ $(document).on('click', '[data-datagrid-confirm]:not(.ajax)', function(e) {
 });
 
 if (typeof naja !== "undefined") {
+	dataGridRegisterExtension('datagrid.group.confirm', {
+		interaction: function(settings) {
+			var confirm_message;
+			var el = settings.nette.el;
+			if (settings.nette && el && el.data('group-confirm')) {
+				if (settings.nette.el.data('group-confirm') === 'notButton') {
+					var can_confirm = true;
+					var parent = $(el).parent();
+
+					if (parent.find('textarea').length === 1 && parent.find('textarea').is(':visible')) {
+						can_confirm = Nette.validateControl(parent.find('textarea'));
+					} else if (parent.find('input[type=text]').length === 1 && parent.find('input[type=text]').is(':visible')) {
+						can_confirm = Nette.validateControl($(el).parent().find('input[type=text]'));
+					}
+					if (can_confirm) {
+						confirm_message = parent.find('select option:selected').data('confirm');
+					}
+				} else {
+					confirm_message = el.data('group-confirm');
+				}
+				if (confirm_message) {
+					return confirm(confirm_message);
+				}
+			}
+			return true;
+		}
+	});
+} else {
+	dataGridRegisterExtension('datagrid.group.confirm', {
+		before: function(xhr, settings) {
+			var confirm_message;
+			var el = settings.nette.el;
+			if (settings.nette && el && el.data('group-confirm')) {
+				if (settings.nette.el.data('group-confirm') === 'notButton') {
+					var can_confirm = true;
+					var parent = $(el).parent();
+
+					if (parent.find('textarea').length === 1 && parent.find('textarea').is(':visible')) {
+						can_confirm = Nette.validateControl(parent.find('textarea'));
+					} else if (parent.find('input[type=text]').length === 1 && parent.find('input[type=text]').is(':visible')) {
+						can_confirm = Nette.validateControl($(el).parent().find('input[type=text]'));
+					}
+					if (can_confirm) {
+						confirm_message = parent.find('select option:selected').data('confirm');
+					}
+				} else {
+					confirm_message = el.data('group-confirm');
+				}
+				if (confirm_message) {
+					return confirm(confirm_message);
+				}
+			}
+			return true;
+		}
+	});
+}
+
+if (typeof naja !== "undefined") {
 	dataGridRegisterExtension('datagrid.confirm', {
 		interaction: function(settings) {
 			var confirm_message;

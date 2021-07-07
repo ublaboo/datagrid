@@ -9,6 +9,7 @@ use Nette\Forms\Container;
 use Nette\Forms\Controls\SelectBox;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Forms\Form as NetteForm;
+use Nette\Utils\Html;
 use Ublaboo\DataGrid\DataGrid;
 use Ublaboo\DataGrid\Exception\DataGridGroupActionException;
 
@@ -52,6 +53,12 @@ class GroupActionCollection
 		foreach ($this->groupActions as $id => $action) {
 			if ($action instanceof GroupButtonAction) {
 				$control = $container->addSubmit((string) $id, $action->getTitle());
+				if ($action->hasConfirmation()) {
+					$control->setHtmlAttribute(
+						'data-group-confirm',
+						$action->getConfirmationDialog($this->datagrid)
+					);
+				}
 
 				/**
 				 * User may set a class to the form control
@@ -66,13 +73,21 @@ class GroupActionCollection
 				}
 			}
 		}
+		$hasGroupConfirmation = false;
 
 		/**
 		 * Second foreach for filling "main" select
 		 */
 		foreach ($this->groupActions as $id => $action) {
 			if (! $action instanceof GroupButtonAction) {
-				$main_options[$id] = $action->getTitle();
+				if ($action->hasConfirmation()) {
+					$el = Html::el('')->setText($action->getTitle());
+					$el->setAttribute('data-confirm', $action->getConfirmationDialog($this->datagrid));
+					$main_options[$id] = $el;
+					$hasGroupConfirmation = true;
+				} else {
+					$main_options[$id] = $action->getTitle();
+				}
 			}
 		}
 
@@ -140,12 +155,15 @@ class GroupActionCollection
 					strtolower($this->datagrid->getFullName()) . 'group_action_submit'
 				);
 
-			$container->addSubmit('submit', 'ublaboo_datagrid.execute')
-				->setValidationScope([$container])
+			$sbmt = $container->addSubmit('submit', 'ublaboo_datagrid.execute');
+			$sbmt->setValidationScope([$container])
 				->setAttribute(
 					'id',
 					strtolower($this->datagrid->getFullName()) . 'group_action_submit'
 				);
+			if ($hasGroupConfirmation) {
+				$sbmt->setHtmlAttribute('data-group-confirm', 'notButton');
+			}
 		} else {
 			unset($container['group_action']);
 		}
