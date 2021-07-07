@@ -3320,4 +3320,16 @@ class DataGrid extends Control
 		return $this->getPresenter();
 	}
 
+	
+	protected function createComponent(string $name): ?\Nette\ComponentModel\IComponent
+	{
+		$control = parent::createComponent($name);
+
+		if ($control === null && $this->parent !== null) {
+			return $this->getParentComponent()->createComponent($name);
+		}
+
+		return $control;
+	}
+
 }
