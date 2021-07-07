@@ -2006,6 +2006,7 @@ class DataGrid extends Control
 		}
 
 		if ($this->defaultSortUseOnReset) {
+			$this->deleteSessionData('_grid_sort');
 			$this->deleteSessionData('_grid_has_sorted');
 		}
 
