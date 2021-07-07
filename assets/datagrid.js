@@ -282,10 +282,7 @@ document.addEventListener('change', function(e) {
 	if (grid) {
 		checked_inputs = document.querySelectorAll('input[data-check-all-' + grid + ']:checked');
 		select = document.querySelector('.datagrid-' + grid + ' select[name="group_action[group_action]"]');
-		buttons = document.querySelectorAll('.datagrid-' + grid + ' input[type="submit"]');
-		if (buttons.length === 0) {
-			buttons = document.querySelectorAll('.datagrid-' + grid + ' button[type="submit"]');
-		}
+		buttons = document.querySelectorAll('.datagrid-' + grid + ' .row-group-actions *[type="submit"]');
 		counter = document.querySelector('.datagrid-' + grid + ' .datagrid-selected-rows-count');
 
 		if (checked_inputs.length) {
