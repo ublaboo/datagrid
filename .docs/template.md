@@ -20,7 +20,7 @@ $grid->setTemplateFile(__DIR__ . '/../../custom_datagrid_template.latte');
 Template:
 
 ```latte
-{extends $originalTemplate}
+{extends $original_template}
 
 {block data}
 	{foreach $items as $item}
@@ -38,7 +38,7 @@ Template:
 Or you can define column template by defining special block(s):
 
 ```latte
-{extends $originalTemplate}
+{extends $original_template}
 
 {define col-id}
 	:)
@@ -57,7 +57,7 @@ This will overwrite native rendering of ID column (`$grid->addColumn('id', 'Id')
 Or you can define column header template:
 
 ```latte
-{extends $originalTemplate}
+{extends $original_template}
 
 {define col-id-header}
 	This is <strong>ID</strong> column
