@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Ublaboo\DataGrid\Column\Action\Confirmation;
 
+use Ublaboo\DataGrid\Row;
+
 final class CallbackConfirmation implements IConfirmation
 {
 
@@ -19,8 +21,8 @@ final class CallbackConfirmation implements IConfirmation
 	}
 
 
-	public function getCallback(): callable
+	public function getMessage(Row $row): ?string
 	{
-		return $this->callback;
+		return ($this->callback)($row->getItem());
 	}
 }

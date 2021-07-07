@@ -260,33 +260,42 @@ class Action extends Column
 
 
 	/**
-	 * @throws DataGridException
+	 * @return static
 	 */
+	public function setCallbackConfirmation(callable $callback): self
+	{
+		$this->confirmation = new CallbackConfirmation($callback);
+
+		return $this;
+	}
+
+
+	/**
+	 * @return static
+	 */
+	public function setStringConfirmation(string $question, string ...$placeholders): self
+	{
+		$this->confirmation = new StringConfirmation($question, ...$placeholders);
+		$this->confirmation->setTranslator($this->grid->getTranslator());
+
+		return $this;
+	}
+
+
 	public function getConfirmationDialog(Row $row): ?string
 	{
 		if ($this->confirmation === null) {
 			return null;
 		}
 
-		if ($this->confirmation instanceof CallbackConfirmation) {
-			return ($this->confirmation->getCallback())($row->getItem());
-		}
-
 		if ($this->confirmation instanceof StringConfirmation) {
-			$question = $this->translate($this->confirmation->getQuestion());
-
-			if ($this->confirmation->getPlaceholderName() === null) {
-				return $question;
+			if ($this->confirmation->getTranslator() === null) {
+				// Backward compatibility
+				$this->confirmation->setTranslator($this->grid->getTranslator());
 			}
-
-			return str_replace(
-				'%s',
-				(string) $row->getValue($this->confirmation->getPlaceholderName()),
-				$question
-			);
 		}
 
-		throw new DataGridException('Unsupported confirmation');
+		return $this->confirmation->getMessage($row);
 	}
 
 

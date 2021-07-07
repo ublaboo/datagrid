@@ -131,6 +131,18 @@ final class ColumnActionTest extends TestCase
 	}
 
 
+	public function testActionConfirmWithParameters(): void
+	{
+		$action = $this->grid->addAction('action', 'Do', 'doStuff!')
+			->setConfirmation(new StringConfirmation('Really %s %s?', 'id', 'name'));
+
+		Assert::same(
+			'<a href="doStuff!?id=1" class="btn btn-xs btn-default btn-secondary" data-datagrid-confirm="Really 1 John?">Do</a>',
+			$this->render($action)
+		);
+	}
+
+
 	public function testActionRenderCondition(): void
 	{
 		$action = $this->grid->addAction('action1', 'Do', 'doStuff!')->setRenderCondition(function () {
