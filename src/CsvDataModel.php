@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ublaboo\DataGrid;
 
-use Nette\Localization\ITranslator;
+use Nette\Localization\Translator;
 use Ublaboo\DataGrid\Column\Column;
 
 class CsvDataModel
@@ -21,7 +21,7 @@ class CsvDataModel
 	protected $columns;
 
 	/**
-	 * @var ITranslator
+	 * @var Translator
 	 */
 	protected $translator;
 
@@ -29,7 +29,7 @@ class CsvDataModel
 	public function __construct(
 		array $data,
 		array $columns,
-		ITranslator $translator
+		Translator $translator
 	)
 	{
 		$this->data = $data;

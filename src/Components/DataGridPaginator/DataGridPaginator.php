@@ -16,7 +16,7 @@ namespace Ublaboo\DataGrid\Components\DataGridPaginator;
 
 use Nette\Application\UI\Control;
 use Nette\Bridges\ApplicationLatte\Template;
-use Nette\Localization\ITranslator;
+use Nette\Localization\Translator;
 use Nette\Utils\Paginator;
 use Ublaboo\DataGrid\DataGrid;
 use UnexpectedValueException;
@@ -25,7 +25,7 @@ class DataGridPaginator extends Control
 {
 
 	/**
-	 * @var ITranslator
+	 * @var Translator
 	 */
 	private $translator;
 
@@ -46,7 +46,7 @@ class DataGridPaginator extends Control
 
 
 	public function __construct(
-		ITranslator $translator,
+		Translator $translator,
 		string $iconPrefix = 'fa fa-'
 	)
 	{

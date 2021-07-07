@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Ublaboo\DataGrid\Localization;
 
-use Nette\Localization\ITranslator;
+use Nette\Localization\Translator;
 
-class SimpleTranslator implements ITranslator
+class SimpleTranslator implements Translator
 {
 
 	/**
