@@ -93,7 +93,7 @@
 							{/if}
 
 							<div class="datagrid-toolbar" n:if="$control->canHideColumns() || $inlineAdd || $exports || $toolbarButtons">
-								<span n:if="$toolbarButtons">
+								<span n:if="$toolbarButtons" n:snippet="toolbar">
 									{foreach $toolbarButtons as $toolbar_button}{$toolbar_button->renderButton()}{/foreach}
 								</span>
 
